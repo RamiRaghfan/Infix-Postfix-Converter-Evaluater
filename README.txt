@@ -1,153 +1,74 @@
-------------------------------------------------------------------------------
-This is a demo project to test notation conversion algortithms, and expression evaluation.
-C++ COMPILER g++ or IDE REQUIRED FOR THIS TO WORK.
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
+# Notation Conversion and Expression Evaluation Demo Project
 
-There are two already written driver programs for demonstration.
-MainConvert.cpp -- for converting between Infix Postfix notations, and vice versa.
-EvaluateMain.cpp -- for evaluating arithmetic expressions in infix or prefix form.
+This is a demo project for testing notation conversion algorithms and expression evaluation. A C++ compiler (g++ or an IDE) is required for this to work.
 
+## Features
 
-Functions descriptions:
-convrsion1.h
+There are two driver programs included for demonstration:
 
-int isOperand(char c) 
-Takes a char as input, returns 1 if the input agrument is an "operand", 
-AKA an English alphabet character
-------------------------------------------------------------------------------
-int isOperator(char c)
-Takes a char as input, returns 1 if input argument is an (arithmetic) operator, 
-returns 0 otherwise
-------------------------------------------------------------------------------
+- `MainConvert.cpp`: For converting between Infix and Postfix notations, and vice versa.
+- `EvaluateMain.cpp`: For evaluating arithmetic expressions in infix or prefix form.
 
-int prcd(char c)
-Takes input as char, specifically an arithmetic operator,
-returns a number that represents the precedence of an operator over others,
-the higher precedence the higher the number returned
-------------------------------------------------------------------------------
+## Functions Descriptions
 
-string infixToPrefix(string infixInput)
-Takes input as a string, an infix arithmetic expression, for instance:
+### convrsion1.h
 
->> A+B(C-D)
+#### `int isOperand(char c)`
+Takes a char as input, returns 1 if the input argument is an "operand" (an English alphabet character).
 
-Is an infix expression, it converts it to its prefix notation using stack, 
-the conversion algorithm is a very standard one.
+#### `int isOperator(char c)`
+Takes a char as input, returns 1 if the input argument is an (arithmetic) operator, returns 0 otherwise.
 
-Result of previous example as input
+#### `int prcd(char c)`
+Takes input as char (specifically an arithmetic operator), returns a number that represents the precedence of an operator over others. The higher the precedence, the higher the number returned.
 
->> +AB-CD
+#### `string infixToPrefix(string infixInput)`
+Converts an infix arithmetic expression to its prefix notation using a stack. This algorithm is compatible with all types of parentheses, and spaces do not affect it.
 
-This alrgorithm  is compatible with all types of parantheses, 
-and spaces do not affect it*
+*Example:*
+Input: `A+B(C-D)`  
+Output: `+AB-CD`  
 
-*further testing required for limits
-------------------------------------------------------------------------------
+#### `string prefixToInfix(string input)`
+Converts a prefix expression to an infix expression. Spaces in the input are always ignored.
 
-string prefixToInfix(string input)
+*Example:*
+Input: `+AB-CD`  
+Output: `(A+B)(C-D)`  
 
-Takes input as a string, a prefix expression, for instance:
+### Helper Functions
 
->> +AB-CD
+#### `void reverseCorrect(string &inputStr)`
+Reverses a string using C++ STL and flips every occurrence of any parenthesis.
 
-Is a prefix expression, using a standard algorithm with stacks (similar as previous function),
-it converts it to an infix expression.
+#### `bool isClParantheses(char c)`
+Returns `true` if the passed argument is a closed parenthesis, `false` otherwise.
 
->> (A+B)(C-D)
+#### `bool isOpParantheses(char c)`
+Returns `true` if the passed argument is an open parenthesis, `false` otherwise.
 
-Spaces do not affect the input, because they are always ignored thanks to some helper functions
+#### `int isOperand(char c)`
+Returns `true` if the passed argument is an operand, `false` otherwise.
 
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
+#### `int isOperator(char c)`
+Returns `true` if the passed argument is an arithmetic operator, `false` otherwise.
 
+## evaluater.h Functions Descriptions
 
-void reverseCorrect(string &inputStr)
-	
-Takes a string as a input and reverses it using C++ STL, after it has been reversed, 
-it is traversed character by character and every occurrance of any parathasis will flip this parathesis' open side.
+### `void readOperands()`
+Reads operands and their values as input in the form `(Token, Value)` and stores them for later use. Input stops when " 00 " is entered.
 
+### `void showOperands()`
+Displays all stored operands and their values in the form `(Token, Value)`.
 
-------------------------------------------------------------------------------
+### `double applyOp(int a, int b, char op)`
+Applies an arithmetic operation (represented by 'op') to two integers.
 
-The following are two helper functions that take a character (char) as input and returns bool.
+### `double evaluateInfix(string expression)`
+Evaluates an infix expression using two stacks. The algorithm requires parentheses between pairs of operands.
 
-bool isClParantheses(char c)  : returns true if the passed argument is a closed parathesis,
-returns false otherwise.
+### `double evaluatePrefix(string expression)`
+Evaluates a prefix expression by traversing the string in reverse, applying operators to operands stored in a stack.
 
-bool isOpParantheses(char c)  : returns true if the passed argument is an open parathesis, 
-returns false otherwise.
-
-------------------------------------------------------------------------------
-
-The following are two helper functions that take a character (char) as input and returns an int.
-
-int isOperand(char c)  : returns true if the passed argument is an operand,
-false otherwise
-
-int isOperator(char c) : returns true if the passed argument is an arithmetic operator,
-false otherwise.
-
-------------------------------------------------------------------------------
-END OF conversion.h
-
-
-Function descriptions for evaluater.h
-
-void readOperands()
-
-This function waits for an operand and its value as input in console with this form:
->> (Token, Value)
-then stores it in a structure for later use.
-
-Each newline will make the program wait for new input until " 00 " is entered, 
-the reading will then stop.
-------------------------------------------------------------------------------
-
-void showOperands()
-
-Displays on the console all the stored operands and their associated value in this form
-
->>(Token, Value)
-------------------------------------------------------------------------------
-
-
-double applyOp(int a, in b, char op)
-
-Takes 2 integers and 1 character as input, the character represents arithmetic operation
-depending on the operator, the operation of 'op' will be applied
-------------------------------------------------------------------------------
-
-double evaluateInfix(string expression)
-
-Takes a string as input, then traverses it character by character and evaluates the 
-expression using 2 stacks, for operands, and for operators. 
-
-The algorithm strictly needs parantheses between pairs of operands to work, 
-because they are used as a way for the program to know when to stop reading the expression, 
-and to evaluate one pair and continue with it.  
-
-------------------------------------------------------------------------------
-
-double evaluatePrefix(string expression)
-
-Takes a string expression as input, then traverses the string in reverse character by character,
-storing any operand in a stack, and when an operator is read, two operands are taken from the stack and applied the operator that was read, the result is stored back in the operand stack.
-This repeats until the stack is empty and the result will be sitting on top of the stack.
-
-------------------------------------------------------------------------------
-
-
-Operand getOperand(char token)
-
-Using a char as an argument, it will search in the Operand structure for the operand token
-
->>(Token, Value)
-
-If found, it will return a copy of the pair (Token, Value). 
-If not found, will return ('?', Arbitrary Value).
-
-------------------------------------------------------------------------------
-
-
-
+### `Operand getOperand(char token)`
+Searches for the operand token in the Operand structure and returns it. If not found, returns ('?', Arbitrary Value).
